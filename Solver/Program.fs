@@ -50,6 +50,18 @@ let main argv =
     
     fiveLetterWords |> Seq.iter CountLettersInWord
     
+    let kvToTuple = (fun (KeyValue(k,v)) -> (k,v))
+    
+    let scoreLetter = (fun i x -> fst x, i+1)
+    let letterValueLookup =
+        letterCounts
+        |> Seq.map kvToTuple
+        |> Seq.sortBy (snd >> (~-))
+        |> Seq.mapi scoreLetter
+        |> dict
+//        |> List
+
+//    let bar = Seq.mapi (fun i x -> i+1, fst x) listOfLetterCounts
     // fiveLetterWords |> Seq.iter (fun x -> printfn $"%s{x}")
     0
     
