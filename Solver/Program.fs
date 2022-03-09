@@ -25,43 +25,49 @@ type Wordle(answer: string) =
     member __.AnalyzeLetter(letter: char) =
         {Letter = letter; State = {IsInWord = true; IsInCorrectPosition = true}}
 
-let fiveLetterWordPattern = Regex("^[A-Za-z]{5}$")
-let isFiveLetterWord(word: string) =
-    fiveLetterWordPattern.IsMatch(word)
+module WordListTools = 
+    let fiveLetterWordPattern = Regex("^[A-Za-z]{5}$")
+    let isFiveLetterWord(word: string) =
+        fiveLetterWordPattern.IsMatch(word)
 
-let ReadFiveLetterWords(filePath: string) =
-    (IO.File.ReadAllText filePath).Split("\n")
-        |> Array.filter isFiveLetterWord
-        |> Array.map (fun word -> word.ToUpperInvariant())
-    
+    let ReadFiveLetterWords(filePath: string) =
+        (IO.File.ReadAllText filePath).Split("\n")
+            |> Array.filter isFiveLetterWord
+            |> Array.map (fun word -> word.ToUpperInvariant())
+
+    let BuildLetterValueLookup(wordList: string[]) = 
+        let letterCounts = new Dictionary<char, int>()
+        
+        let IncCharCount(c: char) =
+            letterCounts.[c] <- letterCounts.GetValueOrDefault(c, 0) + 1
+            
+        let CountLettersInWord(word: string) =
+            word.ToCharArray() |> Seq.iter IncCharCount
+        
+        wordList |> Seq.iter CountLettersInWord
+        
+        let kvToTuple = (fun (KeyValue(k,v)) -> (k,v))
+        
+        let scoreLetter = (fun i x -> fst x, i+1)
+
+        letterCounts
+            |> Seq.map kvToTuple
+            |> Seq.sortBy (snd >> (~-))
+            |> Seq.mapi scoreLetter
+            |> dict
+
+open WordListTools
+
 [<EntryPoint>]
 let main argv =
     printfn "Reading words file..."
     let fiveLetterWords = ReadFiveLetterWords("words.txt")
     printfn $"%i{fiveLetterWords.Length}"
+            
+    let letterValueLookup = BuildLetterValueLookup(fiveLetterWords)
     
-    let letterCounts = new Dictionary<char, int>()
-    
-    let IncCharCount(c: char) =
-        letterCounts.[c] <- letterCounts.GetValueOrDefault(c, 0) + 1
-        
-    let CountLettersInWord(word: string) =
-        word.ToCharArray() |> Seq.iter IncCharCount
-    
-    fiveLetterWords |> Seq.iter CountLettersInWord
-    
-    let kvToTuple = (fun (KeyValue(k,v)) -> (k,v))
-    
-    let scoreLetter = (fun i x -> fst x, i+1)
-    let letterValueLookup =
-        letterCounts
-        |> Seq.map kvToTuple
-        |> Seq.sortBy (snd >> (~-))
-        |> Seq.mapi scoreLetter
-        |> dict
-//        |> List
-
-//    let bar = Seq.mapi (fun i x -> i+1, fst x) listOfLetterCounts
-    // fiveLetterWords |> Seq.iter (fun x -> printfn $"%s{x}")
+//    letterValueLookup.ContainsKey('A')
+//    letterValueLookup.GetType()
+//    let foo = letterValueLookup['B']
     0
     
