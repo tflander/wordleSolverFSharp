@@ -26,11 +26,14 @@ type Wordle(answer: string) =
         {Letter = letter; State = {IsInWord = true; IsInCorrectPosition = true}}
 
 module WordListTools = 
-    let fiveLetterWordPattern = Regex("^[A-Za-z]{5}$")
-    let isFiveLetterWord(word: string) =
-        fiveLetterWordPattern.IsMatch(word)
 
     let ReadFiveLetterWords(filePath: string) =
+        
+        let fiveLetterWordPattern = Regex("^[A-Za-z]{5}$")
+        
+        let isFiveLetterWord(word: string) =
+            fiveLetterWordPattern.IsMatch(word)
+        
         (IO.File.ReadAllText filePath).Split("\n")
             |> Array.filter isFiveLetterWord
             |> Array.map (fun word -> word.ToUpperInvariant())
