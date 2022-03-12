@@ -14,18 +14,13 @@ type ``IsLetterStateValid tests`` () =
             [| {IsInWord = true; IsInCorrectPosition = false}; true |]
             [| {IsInWord = true; IsInCorrectPosition = true}; true |]
         ]
-        
-    [<Theory>]
-    [<MemberData("IsLetterStateValidTestData")>]
-    member __.IsLetterStateValid (state: LetterState) (expectedIsValid: bool) =
-        test <@ IsLetterStateValid(state) = expectedIsValid @>
-        
+                
     [<Fact>]
     member __.CreateGame() =
         let game = Wordle("MUSIC")
-        let m = {Letter = 'M'; State = {IsInWord = true; IsInCorrectPosition = true}}
-        let u = {Letter = 'U'; State = {IsInWord = true; IsInCorrectPosition = true}}
-        let s = {Letter = 'S'; State = {IsInWord = true; IsInCorrectPosition = true}}
-        let i = {Letter = 'I'; State = {IsInWord = true; IsInCorrectPosition = true}}
-        let c = {Letter = 'C'; State = {IsInWord = true; IsInCorrectPosition = true}}
+        let m = {Letter = 'M'; State = Hit}
+        let u = {Letter = 'U'; State = Hit}
+        let s = {Letter = 'S'; State = Hit}
+        let i = {Letter = 'I'; State = Hit}
+        let c = {Letter = 'C'; State = Hit}
         test <@ game.Guess("MUSIC") = [m; u; s; i; c] @>        

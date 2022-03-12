@@ -7,23 +7,28 @@ type LetterState = {
     IsInCorrectPosition: bool
 }
 
+type LetterState2 =
+    | Hit
+    | Near
+    | Miss
+
+
 type LetterAnswer = {
     Letter: char
-    State: LetterState
+    State: LetterState2
 }
 
-let IsLetterStateValid (state: LetterState) =
-    match state with
-    | {IsInWord = false; IsInCorrectPosition = true} -> false
-    | _ -> true
+//let IsLetterStateValid (state: LetterState) =
+//    match state with
+//    | {IsInWord = false; IsInCorrectPosition = true} -> false
+//    | _ -> true
     
 type Wordle(answer: string) =
     member __.Guess(word: string) =
         let chars = word.ToUpperInvariant().ToCharArray()
         List.map (fun i -> __.AnalyzeLetter(chars.[i])) [0..4]
  
-    member __.AnalyzeLetter(letter: char) =
-        {Letter = letter; State = {IsInWord = true; IsInCorrectPosition = true}}
+    member __.AnalyzeLetter(letter: char) = {Letter = letter; State = Hit}
 
 module WordListTools = 
 
@@ -58,6 +63,9 @@ module WordListTools =
             |> Seq.sortBy (snd >> (~-))
             |> Seq.mapi scoreLetter
             |> dict
+            
+    let ScoreWord(word: string, letterValueLookup: IDictionary<char, int>) =
+        Array.fold (fun a c -> a + letterValueLookup.[c]) 0 (word.ToCharArray())
 
 open WordListTools
 
@@ -69,8 +77,11 @@ let main argv =
             
     let letterValueLookup = BuildLetterValueLookup(fiveLetterWords)
     
-//    letterValueLookup.ContainsKey('A')
-//    letterValueLookup.GetType()
-//    let foo = letterValueLookup['B']
+    let score = ScoreWord("MUSIC", letterValueLookup)
+    
+//    let scoredWords = Array.map (fun s -> ScoreWord(s, letterValueLookup), s) fiveLetterWords
+//    let foo = Seq.sortBy (fst >> (~-)) scoredWords
+    
+    
     0
     
