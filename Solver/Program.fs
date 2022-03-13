@@ -2,33 +2,30 @@ open System
 open System.Collections.Generic
 open System.Text.RegularExpressions
 
-type LetterState = {
-    IsInWord: bool
-    IsInCorrectPosition: bool
-}
-
-type LetterState2 =
+type LetterState =
     | Hit
-    | Near
+    | NearMiss
     | Miss
 
 
 type LetterAnswer = {
     Letter: char
-    State: LetterState2
+    State: LetterState
 }
-
-//let IsLetterStateValid (state: LetterState) =
-//    match state with
-//    | {IsInWord = false; IsInCorrectPosition = true} -> false
-//    | _ -> true
     
 type Wordle(answer: string) =
     member __.Guess(word: string) =
         let chars = word.ToUpperInvariant().ToCharArray()
-        List.map (fun i -> __.AnalyzeLetter(chars.[i])) [0..4]
+        List.map (fun i -> __.AnalyzeLetter(chars.[i], i)) [0..4]
  
-    member __.AnalyzeLetter(letter: char) = {Letter = letter; State = Hit}
+    member __.AnalyzeLetter(letter: char, pos: int) =
+        let state =
+            match answer.Contains(letter) with
+            | true when answer.[pos] = letter -> Hit
+            | true -> NearMiss
+            | false -> Miss
+            
+        {Letter = letter; State = state}
 
 module WordListTools = 
 
@@ -81,7 +78,6 @@ let main argv =
     
 //    let scoredWords = Array.map (fun s -> ScoreWord(s, letterValueLookup), s) fiveLetterWords
 //    let foo = Seq.sortBy (fst >> (~-)) scoredWords
-    
     
     0
     
