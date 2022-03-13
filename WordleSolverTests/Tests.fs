@@ -5,7 +5,7 @@ open Xunit
 open Program
 open Swensen.Unquote
     
-type ``IsLetterStateValid tests`` () = 
+type ``Evauluate guess tests`` () = 
 //    static member IsLetterStateValidTestData 
 //        with get() : obj[] list = 
 //        [
@@ -14,34 +14,25 @@ type ``IsLetterStateValid tests`` () =
 //            [| {IsInWord = true; IsInCorrectPosition = false}; true |]
 //            [| {IsInWord = true; IsInCorrectPosition = true}; true |]
 //        ]
+    
+    let ExpectResultForGuess(guess: string, expectedStates: LetterState list) =
+        let chars = guess.ToCharArray()
+        chars
+            |> Array.mapi (fun i c -> {Letter = c; State = expectedStates.[i]})
+            |> Array.toList
                 
     [<Fact>]
     member __.AllHits() =
-        let game = Wordle("MUSIC")
-        let m = {Letter = 'M'; State = Hit}
-        let u = {Letter = 'U'; State = Hit}
-        let s = {Letter = 'S'; State = Hit}
-        let i = {Letter = 'I'; State = Hit}
-        let c = {Letter = 'C'; State = Hit}
-        test <@ game.Guess("MUSIC") = [m; u; s; i; c] @>
+        let game = Wordle("MUSIC")        
+        test <@ game.Guess("MUSIC") = ExpectResultForGuess("MUSIC", [Hit; Hit; Hit; Hit; Hit]) @>
                 
     [<Fact>]
     member __.AllMisses() =
         let game = Wordle("MUSIC")
-        let t = {Letter = 'T'; State = Miss}
-        let e = {Letter = 'E'; State = Miss}
-        let x = {Letter = 'X'; State = Miss}
-        let a = {Letter = 'A'; State = Miss}
-        let n = {Letter = 'N'; State = Miss}
-        test <@ game.Guess("TEXAN") = [t; e; x; a; n] @>
+        test <@ game.Guess("TEXAN") = ExpectResultForGuess("TEXAN", [Miss; Miss; Miss; Miss; Miss]) @>
                 
     [<Fact>]
     member __.OneNearMiss() =
         let game = Wordle("MUSIC")
-        let t = {Letter = 'T'; State = Miss}
-        let e = {Letter = 'E'; State = Miss}
-        let x = {Letter = 'X'; State = Miss}
-        let a = {Letter = 'A'; State = Miss}
-        let s = {Letter = 'S'; State = NearMiss}
-        test <@ game.Guess("TEXAS") = [t; e; x; a; s] @>
+        test <@ game.Guess("TEXAS") = ExpectResultForGuess("TEXAS", [Miss; Miss; Miss; Miss; NearMiss]) @>
                 
