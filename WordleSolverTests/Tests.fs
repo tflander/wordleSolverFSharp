@@ -6,15 +6,13 @@ open Program
 open Swensen.Unquote
     
 type ``Evauluate guess tests`` () = 
-//    static member IsLetterStateValidTestData 
-//        with get() : obj[] list = 
-//        [
-//            [| {IsInWord = false; IsInCorrectPosition = false}; true |]
-//            [| {IsInWord = false; IsInCorrectPosition = true}; false |]
-//            [| {IsInWord = true; IsInCorrectPosition = false}; true |]
-//            [| {IsInWord = true; IsInCorrectPosition = true}; true |]
-//        ]
     
+    let ExpectResultForGuess(guess: string, expectedStates: LetterState list) =
+        let chars = guess.ToCharArray()
+        chars
+            |> Array.mapi (fun i c -> {Letter = c; State = expectedStates.[i]})
+            |> Array.toList
+
     let GivenGameWithSolution(solution: string) =
         Wordle(solution)
         
