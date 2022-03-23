@@ -24,20 +24,26 @@ type ``Evauluate guess tests`` () =
         test <@ actualStates = expectedStates @>
 
     [<Fact>]
-    member __.AllHits2() =
+    member __.``All Hits``() =
         GivenGameWithSolution("MUSIC")
             |> WhenGuess("MUSIC")
             |> ExpectResult([Hit; Hit; Hit; Hit; Hit])
                                     
     [<Fact>]
-    member __.AllMisses() =
+    member __.``All Misses``() =
         GivenGameWithSolution("MUSIC")
             |> WhenGuess("TEXAN")
             |> ExpectResult([Miss; Miss; Miss; Miss; Miss])
                 
     [<Fact>]
-    member __.OneNearMiss() =
+    member __.``One Near Miss``() =
         GivenGameWithSolution("MUSIC")
             |> WhenGuess("TEXAS")
             |> ExpectResult([Miss; Miss; Miss; Miss; NearMiss])
                 
+    [<Fact>]
+    member __.``Double Letter Guessed Wrong Position``() =
+        GivenGameWithSolution("MUSIC")
+            |> WhenGuess("GUESS")
+            |> ExpectResult([Miss; Hit; Miss; NearMiss; Miss])
+                                
