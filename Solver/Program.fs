@@ -12,21 +12,37 @@ type LetterAnswer = {
     Letter: char
     State: LetterState
 }
+
+let FilterWords (guessResult: LetterAnswer list) (wordList: string[]) =
+    let FilterForResult (result: LetterAnswer) =
+        match result.State with
+        | Miss -> (fun (word: string) -> not (word.Contains(result.Letter)))
+        
+//    wordList
+//        |> Array.filter (FilterForResult(guessResult.[0]))
+
+    let foo = List.map(fun (result: LetterAnswer) -> FilterForResult(result)) guessResult
+    
+    List.fold (fun (currentWordList: string[]) (filter: string->bool) -> Array.filter filter currentWordList) wordList foo
     
 type Wordle(answer: string) =
     member __.Guess(word: string) =
-        let chars = word.ToUpperInvariant().ToCharArray()
-        List.map (fun i -> __.AnalyzeLetter(chars.[i], i)) [0..4]
- 
-    member __.AnalyzeLetter(letter: char, pos: int) =
-        let state =
-            match answer.Contains(letter) with
-            | true when answer.[pos] = letter -> Hit
-            | true -> NearMiss
-            | false -> Miss
+        
+        let mutable answerCopy = answer
+        
+        let AnalyzeLetter(letter: char, pos: int) = 
+            let state =
+                match answerCopy.Contains(letter) with
+                | true when answerCopy.[pos] = letter -> Hit
+                | true -> NearMiss
+                | false -> Miss
             
-        {Letter = letter; State = state}
-
+            answerCopy <- answerCopy.Replace(letter, ' ')
+            {Letter = letter; State = state}
+        
+        let chars = word.ToUpperInvariant().ToCharArray()
+        List.map (fun i -> AnalyzeLetter(chars.[i], i)) [0..4]
+ 
 module WordListTools = 
 
     let ReadFiveLetterWords(filePath: string) =

@@ -4,6 +4,9 @@ open System
 open Xunit
 open Program
 open Swensen.Unquote
+
+let GivenGameWithSolution(solution: string) =
+    Wordle(solution)
     
 type ``Evauluate guess tests`` () = 
     
@@ -12,9 +15,6 @@ type ``Evauluate guess tests`` () =
         chars
             |> Array.mapi (fun i c -> {Letter = c; State = expectedStates.[i]})
             |> Array.toList
-
-    let GivenGameWithSolution(solution: string) =
-        Wordle(solution)
         
     let WhenGuess(guess: string) (game: Wordle) =
         game.Guess(guess)
@@ -46,4 +46,18 @@ type ``Evauluate guess tests`` () =
         GivenGameWithSolution("MUSIC")
             |> WhenGuess("GUESS")
             |> ExpectResult([Miss; Hit; Miss; NearMiss; Miss])
+                                
+
+open WordListTools
+                                
+type ``FilterWordListTests`` () = 
+
+    let fiveLetterWords = ReadFiveLetterWords("words.txt")
+    
+    [<Fact>]
+    member __.``Foo``() =
+        let game = GivenGameWithSolution("MUSIC")
+        let response = game.Guess("TEXAN")
+        let updatedWordList = FilterWords response fiveLetterWords
+        test <@ 1 = 2 @>
                                 
