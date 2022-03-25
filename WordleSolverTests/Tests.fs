@@ -8,17 +8,11 @@ open Swensen.Unquote
 let GivenGameWithSolution(solution: string) =
     Wordle(solution)
     
-type ``Evauluate guess tests`` () = 
+let WhenGuess(guess: string) (game: Wordle) =
+    game.Guess(guess)
     
-    let ExpectResultForGuess(guess: string, expectedStates: LetterState list) =
-        let chars = guess.ToCharArray()
-        chars
-            |> Array.mapi (fun i c -> {Letter = c; State = expectedStates.[i]})
-            |> Array.toList
-        
-    let WhenGuess(guess: string) (game: Wordle) =
-        game.Guess(guess)
-        
+type ``Evauluate guess tests`` () = 
+                    
     let ExpectResult(expectedStates: LetterState list) (actualResult: LetterAnswer list) =
         let actualStates = List.map (fun answer -> answer.State) actualResult
         test <@ actualStates = expectedStates @>
@@ -55,35 +49,52 @@ type ``FilterWordListTests`` () =
     let fiveLetterWords = ReadFiveLetterWords("words.txt")
     
     let sampleWords = [| "MUSIC"; "TEXAN"; "TEXAS"; "GUILD"; "RANKS"; "MARES"|]
-
+    
+    let AndFilterWordsUsingResult wordList result =
+        (FilterWords result wordList), result
+        
+    let ExpectFilteredWords (expected: string[]) (actual: string[], guessResult) =
+        test <@ expected = actual @>
+        guessResult
+        
+    let AndGameIsNotWon(guessResult) = 
+        test <@ not (IsGameWon guessResult) @>
+        
+    let AndGameIsWon(guessResult) = 
+        test <@ IsGameWon guessResult @>
+        
     [<Fact>]
     member __.``No Letter Matches``() =
-        let game = GivenGameWithSolution("MUSIC")
-        let response = game.Guess("TEXAN")
-        let updatedWordList = FilterWords response sampleWords
-        test <@ updatedWordList = [| "MUSIC"; "GUILD" |] @>
+        GivenGameWithSolution("MUSIC")
+            |> WhenGuess("TEXAN")
+            |>   AndFilterWordsUsingResult sampleWords
+            |> ExpectFilteredWords [| "MUSIC"; "GUILD" |]
+            |>   AndGameIsNotWon
+        
         
     [<Fact>]
     member __.``One Hit``() =
-        let game = GivenGameWithSolution("MUSIC")
-        let response = game.Guess("MERRY")
-        let updatedWordList = FilterWords response sampleWords
-        test <@ updatedWordList = [| "MUSIC" |] @>
-        test <@ not (IsGameWon response) @>
+        GivenGameWithSolution("MUSIC")
+            |> WhenGuess("MERRY")
+            |>   AndFilterWordsUsingResult sampleWords
+            |> ExpectFilteredWords [| "MUSIC" |]
+            |>   AndGameIsNotWon
         
     [<Fact>]
     member __.``One Near Miss``() =
-        let game = GivenGameWithSolution("MUSIC")
-        let response = game.Guess("TEXAS")
-        let updatedWordList = FilterWords response sampleWords
-        test <@ updatedWordList = [| "MUSIC" |] @>
-        test <@ not (IsGameWon response) @>
+        GivenGameWithSolution("MUSIC")
+            |> WhenGuess("TEXAS")
+            |>   AndFilterWordsUsingResult sampleWords
+            |> ExpectFilteredWords [| "MUSIC" |]
+            |>   AndGameIsNotWon
         
     [<Fact>]
     member __.``Exact Match``() =
-        let game = GivenGameWithSolution("MUSIC")
-        let response = game.Guess("MUSIC")
-        test <@ IsGameWon response @>
+        GivenGameWithSolution("MUSIC")
+            |> WhenGuess("MUSIC")
+            |>   AndFilterWordsUsingResult sampleWords
+            |> ExpectFilteredWords [| "MUSIC" |]
+            |>   AndGameIsWon
 
     [<Fact(Skip = "This is spike code to delete")>]
 //    [<Fact>]
