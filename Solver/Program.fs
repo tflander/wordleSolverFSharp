@@ -14,14 +14,12 @@ type LetterAnswer = {
 }
 
 let FilterWords (guessResult: LetterAnswer list) (wordList: string[]) =
-    let FilterForResult (result: LetterAnswer) =
+    let FilterForLetterAnswer (index: int, result: LetterAnswer) =
         match result.State with
-        | Miss -> (fun (word: string) -> not (word.Contains(result.Letter)))
+            | Miss -> (fun (word: string) -> not (word.Contains(result.Letter)))
+            | Hit -> (fun (word: string) -> word.[index] = result.Letter)
         
-//    wordList
-//        |> Array.filter (FilterForResult(guessResult.[0]))
-
-    let foo = List.map(fun (result: LetterAnswer) -> FilterForResult(result)) guessResult
+    let foo = List.mapi(fun i (result: LetterAnswer) -> FilterForLetterAnswer(i, result)) guessResult
     
     List.fold (fun (currentWordList: string[]) (filter: string->bool) -> Array.filter filter currentWordList) wordList foo
     

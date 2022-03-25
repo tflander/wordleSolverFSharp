@@ -54,10 +54,29 @@ type ``FilterWordListTests`` () =
 
     let fiveLetterWords = ReadFiveLetterWords("words.txt")
     
+    let sampleWords = [| "MUSIC"; "TEXAN"; "TEXAS"; "GUILD"; "RANKS"; "MARES"|]
+
     [<Fact>]
-    member __.``Foo``() =
+    member __.``No Letter Matches``() =
         let game = GivenGameWithSolution("MUSIC")
         let response = game.Guess("TEXAN")
-        let updatedWordList = FilterWords response fiveLetterWords
+        let updatedWordList = FilterWords response sampleWords
+        test <@ updatedWordList = [| "MUSIC"; "GUILD" |] @>
+        
+    [<Fact>]
+    member __.``One Hit``() =
+        let game = GivenGameWithSolution("MUSIC")
+        let response = game.Guess("MERRY")
+        let updatedWordList = FilterWords response sampleWords
+        test <@ updatedWordList = [| "MUSIC" |] @>
+        
+    [<Fact(Skip = "This is spike code to delete")>]
+    member __.``Spike``() =
+        let game = GivenGameWithSolution("MUSIC")
+        let response = game.Guess("TEXAN")
+        let updatedWordList = FilterWords response fiveLetterWords // 2768 words
+        
+        let secondResponse = game.Guess "BYPRO"
+        let secondUpdate = FilterWords secondResponse updatedWordList // 388 words
         test <@ 1 = 2 @>
                                 
