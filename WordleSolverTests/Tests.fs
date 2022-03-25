@@ -78,15 +78,19 @@ type ``FilterWordListTests`` () =
         test <@ updatedWordList = [| "MUSIC" |] @>
         
     [<Fact(Skip = "This is spike code to delete")>]
+//    [<Fact>]
     member __.``Spike``() =
         let game = GivenGameWithSolution("MUSIC")
         let response = game.Guess("TEXAN")
         let updatedWordList = FilterWords response fiveLetterWords // 2768 words
         
-        let secondResponse = game.Guess "BYPRO"
-        let secondUpdate = FilterWords secondResponse updatedWordList // 388 words
+        let secondResponse = game.Guess "BIGLY"
+        let secondUpdate = FilterWords secondResponse updatedWordList //  308 words
         
-        let thirdResponse = game.Guess "MEXAN"
-        let thirdUpdate = FilterWords thirdResponse secondUpdate // 34 words
-        test <@ 1 = 2 @>
+        let thirdResponse = game.Guess "CHIMP"
+        let thirdUpdate = FilterWords thirdResponse secondUpdate //  12 words
+
+        let fourthResponse = game.Guess "MUSCI"
+        let fourthUpdate = FilterWords fourthResponse thirdUpdate //  1 word
+        test <@ fourthUpdate.Length = 1 @>
                                 
