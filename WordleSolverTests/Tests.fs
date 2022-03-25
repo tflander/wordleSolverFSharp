@@ -70,6 +70,13 @@ type ``FilterWordListTests`` () =
         let updatedWordList = FilterWords response sampleWords
         test <@ updatedWordList = [| "MUSIC" |] @>
         
+    [<Fact>]
+    member __.``One Near Miss``() =
+        let game = GivenGameWithSolution("MUSIC")
+        let response = game.Guess("TEXAS")
+        let updatedWordList = FilterWords response sampleWords
+        test <@ updatedWordList = [| "MUSIC" |] @>
+        
     [<Fact(Skip = "This is spike code to delete")>]
     member __.``Spike``() =
         let game = GivenGameWithSolution("MUSIC")
@@ -78,5 +85,8 @@ type ``FilterWordListTests`` () =
         
         let secondResponse = game.Guess "BYPRO"
         let secondUpdate = FilterWords secondResponse updatedWordList // 388 words
+        
+        let thirdResponse = game.Guess "MEXAN"
+        let thirdUpdate = FilterWords thirdResponse secondUpdate // 34 words
         test <@ 1 = 2 @>
                                 

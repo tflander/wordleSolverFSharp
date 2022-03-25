@@ -18,6 +18,7 @@ let FilterWords (guessResult: LetterAnswer list) (wordList: string[]) =
         match result.State with
             | Miss -> (fun (word: string) -> not (word.Contains(result.Letter)))
             | Hit -> (fun (word: string) -> word.[index] = result.Letter)
+            | NearMiss -> (fun (word: string) -> not(word.[index] = result.Letter) && word.Contains(result.Letter))
         
     let foo = List.mapi(fun i (result: LetterAnswer) -> FilterForLetterAnswer(i, result)) guessResult
     
