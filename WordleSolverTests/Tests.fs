@@ -87,7 +87,15 @@ type ``FilterWordListTests`` () =
             |>   AndFilterWordsUsingResult sampleWords
             |> ExpectFilteredWords [| "MUSIC" |]
             |>   AndGameIsNotWon
-        
+
+    [<Fact>]
+    member __.``Double S``() =
+        GivenGameWithSolution("MUSIC")
+            |> WhenGuess("GUESS")
+            |>   AndFilterWordsUsingResult sampleWords
+            |> ExpectFilteredWords [| "MUSIC" |]
+            |>   AndGameIsNotWon
+            
     [<Fact>]
     member __.``Exact Match``() =
         GivenGameWithSolution("MUSIC")
@@ -96,6 +104,29 @@ type ``FilterWordListTests`` () =
             |> ExpectFilteredWords [| "MUSIC" |]
             |>   AndGameIsWon
 
+//    [<Fact(Skip = "This is spike code to delete")>]
+    [<Fact>]
+    member __.``Game Simulation``() =
+        let randomWord (wordlist: string[]) =
+            let index = (new System.Random()).Next(wordlist.Length)
+            wordlist.[index]
+
+        let mutable wordList = fiveLetterWords
+        let game = GivenGameWithSolution("MUSIC")
+        
+        let mutable guessCount = 1
+        let mutable guess = randomWord wordList        
+        let mutable guessResult = game.Guess guess
+        
+        while(not (IsGameWon guessResult)) do
+            guessCount <- guessCount + 1
+            wordList <- FilterWords guessResult wordList
+            guess <- randomWord wordList
+            guessResult <- game.Guess guess
+                
+        test <@ guessCount <= 6  @>
+
+                                
     [<Fact(Skip = "This is spike code to delete")>]
 //    [<Fact>]
     member __.``Spike``() =

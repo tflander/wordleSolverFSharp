@@ -15,9 +15,16 @@ type LetterAnswer = {
 
 let FilterWords (guessResult: LetterAnswer list) (wordList: string[]) =
     
+    let FilterForMiss (index: int, result: LetterAnswer) =
+        let otherResultsForTheSameLetter = List.filter (fun (thisResult: LetterAnswer) -> (thisResult.Letter = result.Letter) && (not (thisResult.State = Miss))) guessResult
+        if otherResultsForTheSameLetter.Length > 0 then
+            fun _ -> true
+        else
+            fun (word: string) -> not (word.Contains(result.Letter))
+        
     let FilterForLetterAnswer (index: int, result: LetterAnswer) =
         match result.State with
-            | Miss -> (fun (word: string) -> not (word.Contains(result.Letter)))
+            | Miss -> FilterForMiss(index, result)
             | Hit -> (fun (word: string) -> word.[index] = result.Letter)
             | NearMiss -> (fun (word: string) -> not(word.[index] = result.Letter) && word.Contains(result.Letter))
         
