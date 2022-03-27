@@ -18,7 +18,7 @@ let FilterWords (guessResult: LetterAnswer list) (wordList: string[]) =
     let FilterForMiss (index: int, result: LetterAnswer) =
         let otherResultsForTheSameLetter = List.filter (fun (thisResult: LetterAnswer) -> (thisResult.Letter = result.Letter) && (not (thisResult.State = Miss))) guessResult
         if otherResultsForTheSameLetter.Length > 0 then
-            fun _ -> true
+            fun (word: string) -> not(word.[index] = result.Letter)
         else
             fun (word: string) -> not (word.Contains(result.Letter))
         
