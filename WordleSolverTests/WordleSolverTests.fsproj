@@ -11,7 +11,7 @@
         <Compile Include="Support.fs" />
         <Compile Include="FilterWordListTests.fs" />
         <Compile Include="EvaluateGuessTests.fs" />
-        <Compile Include="Program.fs" />
+        <Compile Include="E2eTests.fs" />
     </ItemGroup>
 
     <ItemGroup>
