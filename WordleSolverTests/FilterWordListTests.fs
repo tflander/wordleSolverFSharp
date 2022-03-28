@@ -1,4 +1,4 @@
-module Tests
+module FilterWordListTests
 
 open System
 open Solver
