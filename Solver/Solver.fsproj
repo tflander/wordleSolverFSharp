@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="Wordle.fs" />
         <Compile Include="Program.fs" />
         <Content Include="words.txt">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>

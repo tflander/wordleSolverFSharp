@@ -4,6 +4,7 @@ open System
 open Xunit
 open Program
 open Swensen.Unquote
+open Solver.Wordle
 
 let GivenGameWithSolution(solution: string) =
     Wordle(solution)
@@ -122,14 +123,17 @@ type ``FilterWordListTests`` () =
         let mutable wordList = fiveLetterWords
         let game = GivenGameWithSolution("MUSIC")
         
-        let mutable guessCount = 1
-        let mutable guess = randomWord wordList        
-        let mutable guessResult = game.Guess guess
+        let foo() = 
+            let mutable guessCount = 1
+            let mutable guess = randomWord wordList        
+            let mutable guessResult = game.Guess guess
         
-        while(not (IsGameWon guessResult)) do
-            guessCount <- guessCount + 1
-            wordList <- FilterWords guessResult wordList
-            guess <- randomWord wordList
-            guessResult <- game.Guess guess
+            while(not (IsGameWon guessResult)) do
+                guessCount <- guessCount + 1
+                wordList <- FilterWords guessResult wordList
+                guess <- randomWord wordList
+                guessResult <- game.Guess guess
                 
-        test <@ guessCount <= 6  @>
+            test <@ guessCount <= 6  @>
+            
+        foo()
