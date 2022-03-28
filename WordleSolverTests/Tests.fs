@@ -2,7 +2,6 @@ module Tests
 
 open System
 open Xunit
-open Program
 open Swensen.Unquote
 open Solver.Wordle
 open Solver.WordListTools
@@ -43,8 +42,6 @@ type ``Evauluate guess tests`` () =
             |> WhenGuess("GUESS")
             |> ExpectResult([Miss; Hit; Miss; NearMiss; Miss])
                                 
-
-open WordListTools
                                 
 type ``FilterWordListTests`` () = 
 
