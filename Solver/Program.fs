@@ -3,19 +3,9 @@ open System.Collections.Generic
 open System.Text.RegularExpressions
 
 open Solver.Wordle
+open Solver.WordListTools
  
 module WordListTools = 
-
-    let ReadFiveLetterWords(filePath: string) =
-        
-        let fiveLetterWordPattern = Regex("^[A-Za-z]{5}$")
-        
-        let isFiveLetterWord(word: string) =
-            fiveLetterWordPattern.IsMatch(word)
-        
-        (IO.File.ReadAllText filePath).Split("\n")
-            |> Array.filter isFiveLetterWord
-            |> Array.map (fun word -> word.ToUpperInvariant())
 
     let BuildLetterValueLookup(wordList: string[]) = 
         let letterCounts = new Dictionary<char, int>()

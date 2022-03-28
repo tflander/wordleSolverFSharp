@@ -5,6 +5,7 @@ open Xunit
 open Program
 open Swensen.Unquote
 open Solver.Wordle
+open Solver.WordListTools
 
 let GivenGameWithSolution(solution: string) =
     Wordle(solution)
