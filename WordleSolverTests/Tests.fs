@@ -97,6 +97,14 @@ type ``FilterWordListTests`` () =
             |>   AndGameIsNotWon
             
     [<Fact>]
+    member __.``Double C``() =
+        GivenGameWithSolution("MUSIC")
+            |> WhenGuess("LUCIC")
+            |>   AndFilterWordsUsingResult sampleWords
+            |> ExpectFilteredWords [| "MUSIC" |]
+            |>   AndGameIsNotWon
+
+    [<Fact>]
     member __.``Exact Match``() =
         GivenGameWithSolution("MUSIC")
             |> WhenGuess("MUSIC")
@@ -125,22 +133,3 @@ type ``FilterWordListTests`` () =
             guessResult <- game.Guess guess
                 
         test <@ guessCount <= 6  @>
-
-                                
-    [<Fact(Skip = "This is spike code to delete")>]
-//    [<Fact>]
-    member __.``Spike``() =
-        let game = GivenGameWithSolution("MUSIC")
-        let response = game.Guess("TEXAN")
-        let updatedWordList = FilterWords response fiveLetterWords // 2768 words
-        
-        let secondResponse = game.Guess "BIGLY"
-        let secondUpdate = FilterWords secondResponse updatedWordList //  308 words
-        
-        let thirdResponse = game.Guess "CHIMP"
-        let thirdUpdate = FilterWords thirdResponse secondUpdate //  12 words
-
-        let fourthResponse = game.Guess "MUSCI"
-        let fourthUpdate = FilterWords fourthResponse thirdUpdate //  1 word
-        test <@ fourthUpdate.Length = 1 @>
-                                
