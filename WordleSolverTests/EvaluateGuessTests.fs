@@ -40,3 +40,9 @@ type ``Evaluate guess tests`` () =
             |> ExpectResult([Miss; Hit; Miss; NearMiss; Miss])
                                 
                                 
+    [<Fact>]
+    member __.``Double Letter Guessed Correct Position``() =
+        GivenGameWithSolution("MUSIC")
+            |> WhenGuess("GASES")
+            |> ExpectResult([Miss; Miss; Hit; Miss; Miss])
+                                
