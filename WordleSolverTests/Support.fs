@@ -3,8 +3,8 @@ module WordleSolverTests.Support
 open Solver.Wordle
 
 let GivenGameWithSolution(solution: string) =
-    Wordle(solution)
+    solution
     
-let WhenGuess(guess: string) (game: Wordle) =
-    game.Guess(guess)
+let WhenGuess(guess: string) (solution: string) =
+    Guess solution guess
 

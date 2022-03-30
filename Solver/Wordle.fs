@@ -34,20 +34,19 @@ let IsGameWon (result: LetterAnswer list) =
     let hits = List.filter(fun (la: LetterAnswer) -> la.State = Hit) result
     hits.Length = 5
 
-type Wordle(answer: string) =
-    member __.Guess(word: string) =
+let Guess(solution: string)(guess: string) =
+    
+    let mutable solutionCopy = solution
+    
+    let AnalyzeLetter(letter: char, pos: int) = 
+        let state =
+            match solutionCopy.Contains(letter) with
+            | true when solutionCopy.[pos] = letter -> Hit
+            | true -> NearMiss
+            | false -> Miss
         
-        let mutable answerCopy = answer
-        
-        let AnalyzeLetter(letter: char, pos: int) = 
-            let state =
-                match answerCopy.Contains(letter) with
-                | true when answerCopy.[pos] = letter -> Hit
-                | true -> NearMiss
-                | false -> Miss
-            
-            answerCopy <- answerCopy.Replace(letter, ' ')
-            {Letter = letter; State = state}
-        
-        let chars = word.ToUpperInvariant().ToCharArray()
-        List.map (fun i -> AnalyzeLetter(chars.[i], i)) [0..4]
+        solutionCopy <- solutionCopy.Replace(letter, ' ')
+        {Letter = letter; State = state}
+    
+    let guessChars = guess.ToUpperInvariant().ToCharArray()
+    List.map (fun i -> AnalyzeLetter(guessChars.[i], i)) [0..4]

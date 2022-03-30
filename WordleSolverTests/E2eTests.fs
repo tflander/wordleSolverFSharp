@@ -17,17 +17,18 @@ type ``End To End Tests`` () =
         let index = Random().Next(wordlist.Length)
         wordlist.[index]
 
-    let play(game: Wordle) = 
+    let play(solution: string) =
+        let game = Guess solution
         let mutable wordList = fiveLetterWords
         let mutable guessCount = 1
         let mutable guess = randomWord wordList        
-        let mutable guessResult = game.Guess guess
+        let mutable guessResult = game guess
     
         while(not (IsGameWon guessResult)) do
             guessCount <- guessCount + 1
             wordList <- FilterWords guessResult wordList
             guess <- randomWord wordList
-            guessResult <- game.Guess guess
+            guessResult <- game guess
             
         test <@ guessCount <= 6  @>
         
