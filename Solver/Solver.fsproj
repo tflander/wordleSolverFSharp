@@ -7,12 +7,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <Compile Include="Domain.fs" />
         <Compile Include="WordGame.fs" />
         <Compile Include="WordListTools.fs" />
         <Compile Include="Program.fs" />
         <Content Include="words.txt">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Compile Include="Domain.fs" />
     </ItemGroup>
 
 </Project>

@@ -1,15 +1,5 @@
 module Solver.WordGame
-
-type LetterState =
-    | Hit
-    | NearMiss
-    | Miss
-
-
-type LetterAnswer = {
-    Letter: char
-    State: LetterState
-}
+open Solver.Domain
 
 let Guess(solution: string)(guess: string) =
     

@@ -1,11 +1,9 @@
 module EvaluateGuessTests
 
 open System
-open Solver
+open Solver.Domain
 open Xunit
 open Swensen.Unquote
-open Solver.WordGame
-open Solver.WordListTools
 
 open WordleSolverTests.Support
     
