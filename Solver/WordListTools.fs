@@ -16,7 +16,7 @@ let ReadFiveLetterWords(filePath: string) =
         |> Array.map (fun word -> word.ToUpperInvariant())
 
 let BuildLetterValueLookup(wordList: string[]) = 
-    let letterCounts = new Dictionary<char, int>()
+    let letterCounts = Dictionary<char, int>()
     
     let IncCharCount(c: char) =
         letterCounts.[c] <- letterCounts.GetValueOrDefault(c, 0) + 1

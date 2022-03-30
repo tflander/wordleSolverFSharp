@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="Wordle.fs" />
+        <Compile Include="WordGame.fs" />
         <Compile Include="WordListTools.fs" />
         <Compile Include="Program.fs" />
         <Content Include="words.txt">

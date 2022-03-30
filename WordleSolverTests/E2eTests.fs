@@ -4,7 +4,7 @@ open System
 open Solver
 open Xunit
 open Swensen.Unquote
-open Solver.Wordle
+open Solver.WordGame
 open Solver.WordListTools
 
 open WordleSolverTests.Support

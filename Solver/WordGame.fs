@@ -1,4 +1,4 @@
-module Solver.Wordle
+module Solver.WordGame
 
 type LetterState =
     | Hit
@@ -30,7 +30,7 @@ let Guess(solution: string)(guess: string) =
 
 let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
     
-    let FilterForMiss (index: int, result: LetterAnswer) =
+    let FilterForMiss (result: LetterAnswer) =
         let otherResultsForTheSameLetter = List.filter (fun (thisResult: LetterAnswer) -> (thisResult.Letter = result.Letter) && (not (thisResult.State = Miss))) guessResult
         if otherResultsForTheSameLetter.Length > 0 then
             fun _ -> true
@@ -39,7 +39,7 @@ let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
         
     let FilterForLetterAnswer (index: int, result: LetterAnswer) =
         match result.State with
-            | Miss -> FilterForMiss(index, result)
+            | Miss -> FilterForMiss(result)
             | Hit -> (fun (word: string) -> word.[index] = result.Letter)
             | NearMiss -> (fun (word: string) -> not(word.[index] = result.Letter) && word.Contains(result.Letter))
         

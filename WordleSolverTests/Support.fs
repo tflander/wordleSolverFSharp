@@ -1,6 +1,6 @@
 module WordleSolverTests.Support
 
-open Solver.Wordle
+open Solver.WordGame
 
 let GivenGameWithSolution(solution: string) =
     solution

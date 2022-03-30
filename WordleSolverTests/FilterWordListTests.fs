@@ -3,7 +3,7 @@ module FilterWordListTests
 open System
 open Xunit
 open Swensen.Unquote
-open Solver.Wordle
+open Solver.WordGame
 
 open WordleSolverTests.Support
                                     
