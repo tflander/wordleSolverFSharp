@@ -16,7 +16,9 @@ let Guess(solution: string)(guess: string) =
         solutionCopy <- solutionCopy.Replace(letter, ' ')
         {Letter = letter; State = state}
     
-    List.map (fun i -> AnalyzeLetter(guessChars.[i], i)) [0..4]
+    guessChars
+              |> Array.mapi(fun i c -> AnalyzeLetter(c, i))
+              |> Array.toList
 
 let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
     
