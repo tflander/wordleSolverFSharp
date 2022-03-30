@@ -11,7 +11,24 @@ type LetterAnswer = {
     State: LetterState
 }
 
-let FilterWords (guessResult: LetterAnswer list) (wordList: string[]) =
+let Guess(solution: string)(guess: string) =
+    
+    let mutable solutionCopy = solution
+    
+    let AnalyzeLetter(letter: char, pos: int) = 
+        let state =
+            match solutionCopy.Contains(letter) with
+            | true when solutionCopy.[pos] = letter -> Hit
+            | true -> NearMiss
+            | false -> Miss
+        
+        solutionCopy <- solutionCopy.Replace(letter, ' ')
+        {Letter = letter; State = state}
+    
+    let guessChars = guess.ToUpperInvariant().ToCharArray()
+    List.map (fun i -> AnalyzeLetter(guessChars.[i], i)) [0..4]
+
+let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
     
     let FilterForMiss (index: int, result: LetterAnswer) =
         let otherResultsForTheSameLetter = List.filter (fun (thisResult: LetterAnswer) -> (thisResult.Letter = result.Letter) && (not (thisResult.State = Miss))) guessResult
@@ -33,20 +50,3 @@ let FilterWords (guessResult: LetterAnswer list) (wordList: string[]) =
 let IsGameWon (result: LetterAnswer list) =
     let hits = List.filter(fun (la: LetterAnswer) -> la.State = Hit) result
     hits.Length = 5
-
-let Guess(solution: string)(guess: string) =
-    
-    let mutable solutionCopy = solution
-    
-    let AnalyzeLetter(letter: char, pos: int) = 
-        let state =
-            match solutionCopy.Contains(letter) with
-            | true when solutionCopy.[pos] = letter -> Hit
-            | true -> NearMiss
-            | false -> Miss
-        
-        solutionCopy <- solutionCopy.Replace(letter, ' ')
-        {Letter = letter; State = state}
-    
-    let guessChars = guess.ToUpperInvariant().ToCharArray()
-    List.map (fun i -> AnalyzeLetter(guessChars.[i], i)) [0..4]

@@ -12,7 +12,7 @@ type ``FilterWordListTests`` () =
     let sampleWords = [| "MUSIC"; "TEXAN"; "TEXAS"; "GUILD"; "RANKS"; "MARES"|]
     
     let AndFilterWordsUsingResult wordList result =
-        (FilterWords result wordList), result
+        (FilterCandidateWords result wordList), result
         
     let ExpectFilteredWords (expected: string[]) (actual: string[], guessResult) =
         test <@ expected = actual @>

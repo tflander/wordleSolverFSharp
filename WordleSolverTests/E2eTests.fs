@@ -26,7 +26,7 @@ type ``End To End Tests`` () =
     
         while(not (IsGameWon guessResult)) do
             guessCount <- guessCount + 1
-            wordList <- FilterWords guessResult wordList
+            wordList <- FilterCandidateWords guessResult wordList
             guess <- randomWord wordList
             guessResult <- game guess
             
