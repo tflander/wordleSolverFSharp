@@ -1,9 +1,10 @@
 module Solver.WordGame
-open Solver.Domain
+open Solver.Types
 
 let Guess(solution: string)(guess: string) =
     
     let mutable solutionCopy = solution
+    let guessChars = guess.ToUpperInvariant().ToCharArray()
     
     let AnalyzeLetter(letter: char, pos: int) = 
         let state =
@@ -15,7 +16,6 @@ let Guess(solution: string)(guess: string) =
         solutionCopy <- solutionCopy.Replace(letter, ' ')
         {Letter = letter; State = state}
     
-    let guessChars = guess.ToUpperInvariant().ToCharArray()
     List.map (fun i -> AnalyzeLetter(guessChars.[i], i)) [0..4]
 
 let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =

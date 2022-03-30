@@ -1,4 +1,4 @@
-module Solver.Domain
+module Solver.Types
 
 type LetterState =
     | Hit

@@ -1,7 +1,7 @@
 module EvaluateGuessTests
 
 open System
-open Solver.Domain
+open Solver.Types
 open Xunit
 open Swensen.Unquote
 
