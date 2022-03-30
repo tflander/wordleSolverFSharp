@@ -14,7 +14,6 @@
         <Content Include="words.txt">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <Compile Include="Domain.fs" />
     </ItemGroup>
 
 </Project>
