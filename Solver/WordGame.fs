@@ -28,14 +28,14 @@ let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
         else
             fun (word: string) -> not (word.Contains(result.Letter))
         
-    let FilterForLetterAnswer (index: int, result: LetterAnswer) =
+    let FilterForLetterAnswer (index: int) (result: LetterAnswer) =
         match result.State with
             | Miss -> FilterForMiss(result)
             | Hit -> (fun (word: string) -> word.[index] = result.Letter)
             | NearMiss -> (fun (word: string) -> not(word.[index] = result.Letter) && word.Contains(result.Letter))
         
-    let filtersToApply = List.mapi(fun i (result: LetterAnswer) -> FilterForLetterAnswer(i, result)) guessResult
-    
+    let filtersToApply = guessResult |> List.mapi(FilterForLetterAnswer)
+                     
     List.fold (fun (currentWordList: string[]) (filter: string->bool) -> Array.filter filter currentWordList) wordList filtersToApply
     
 let IsGameWon (result: LetterAnswer list) =
