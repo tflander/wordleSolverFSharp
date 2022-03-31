@@ -22,9 +22,12 @@ let Guess(solution: string)(guess: string) =
 let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
     
     let FilterForMiss (result: LetterAnswer) =
-        let otherResultsForTheSameLetter = List.filter (fun (thisResult: LetterAnswer) -> (thisResult.Letter = result.Letter) && (not (thisResult.State = Miss))) guessResult
+        let otherResultsForTheSameLetter =
+           guessResult
+           |> List.filter (fun (thisResult: LetterAnswer) -> (thisResult.Letter = result.Letter) && (not (thisResult.State = Miss)))
+           
         if otherResultsForTheSameLetter.Length > 0 then
-            fun _ -> true
+            fun _ -> true  // TODO: should this be false if the letter does not repeat in the solution?
         else
             fun (word: string) -> not (word.Contains(result.Letter))
         
