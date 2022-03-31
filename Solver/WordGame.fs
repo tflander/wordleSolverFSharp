@@ -19,7 +19,7 @@ let Guess(solution: string)(guess: string) =
     guess.ToUpperInvariant().ToCharArray()
               |> Array.mapi AnalyzeLetter
               |> Array.toList
-
+    
 let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
     
     let FilterForMiss (result: LetterAnswer) =
@@ -34,9 +34,9 @@ let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
         
     let FilterForLetterAnswer (index: int) (result: LetterAnswer) =
         match result.State with
-            | Miss -> FilterForMiss(result)
+            | Miss -> FilterForMiss result
             | Hit -> ContainsLetterAtPosition index result
-            | NearMiss -> (fun (word: string) -> not(word.[index] = result.Letter) && word.Contains(result.Letter))
+            | NearMiss -> ContainsLetterInADifferentPosition index result
         
     guessResult
         |> List.mapi(FilterForLetterAnswer)
