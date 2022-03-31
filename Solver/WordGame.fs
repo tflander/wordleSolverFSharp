@@ -39,5 +39,6 @@ let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
     List.fold (fun (currentWordList: string[]) (filter: string->bool) -> Array.filter filter currentWordList) wordList filtersToApply
     
 let IsGameWon (result: LetterAnswer list) =
-    let hits = List.filter(fun (la: LetterAnswer) -> la.State = Hit) result
-    hits.Length = 5
+    let isHit(la: LetterAnswer) = la.State = Hit
+    let hitsInResult = result |> List.filter isHit
+    hitsInResult.Length = 5
