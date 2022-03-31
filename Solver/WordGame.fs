@@ -4,9 +4,8 @@ open Solver.Types
 let Guess(solution: string)(guess: string) =
     
     let mutable solutionCopy = solution
-    let guessChars = guess.ToUpperInvariant().ToCharArray()
     
-    let AnalyzeLetter(letter: char, pos: int) = 
+    let AnalyzeLetter(pos: int) (letter: char) = 
         let state =
             match solutionCopy.Contains(letter) with
             | true when solutionCopy.[pos] = letter -> Hit
@@ -16,8 +15,8 @@ let Guess(solution: string)(guess: string) =
         solutionCopy <- solutionCopy.Replace(letter, ' ')
         {Letter = letter; State = state}
     
-    guessChars
-              |> Array.mapi(fun i c -> AnalyzeLetter(c, i))
+    guess.ToUpperInvariant().ToCharArray()
+              |> Array.mapi AnalyzeLetter
               |> Array.toList
 
 let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
