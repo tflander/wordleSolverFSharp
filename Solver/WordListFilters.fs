@@ -7,3 +7,6 @@ let ContainsLetterAtPosition(index: int) (guessResult: LetterAnswer) (word: stri
 
 let ContainsLetterInADifferentPosition (index: int) (guessResult: LetterAnswer) (word: string) = 
     not(word.[index] = guessResult.Letter) && word.Contains(guessResult.Letter)
+
+let IsDuplicateLetterInGuessResult(missResultGuess: LetterAnswer) (otherResultGuess: LetterAnswer) =
+    (otherResultGuess.Letter = missResultGuess.Letter) && (not (otherResultGuess.State = Miss))
