@@ -34,9 +34,9 @@ let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
             | Hit -> (fun (word: string) -> word.[index] = result.Letter)
             | NearMiss -> (fun (word: string) -> not(word.[index] = result.Letter) && word.Contains(result.Letter))
         
-    let filtersToApply = guessResult |> List.mapi(FilterForLetterAnswer)
-                     
-    List.fold (fun (currentWordList: string[]) (filter: string->bool) -> Array.filter filter currentWordList) wordList filtersToApply
+    guessResult
+        |> List.mapi(FilterForLetterAnswer)
+        |> List.fold (fun (currentWordList: string[]) (filter: string->bool) -> Array.filter filter currentWordList) wordList 
     
 let IsGameWon (result: LetterAnswer list) =
     let isHit(la: LetterAnswer) = la.State = Hit
