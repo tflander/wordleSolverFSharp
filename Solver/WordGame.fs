@@ -1,5 +1,6 @@
 module Solver.WordGame
 open Solver.Types
+open Solver.WordListFilters
 
 let Guess(solution: string)(guess: string) =
     
@@ -29,12 +30,12 @@ let FilterCandidateWords (guessResult: LetterAnswer list) (wordList: string[]) =
         if otherResultsForTheSameLetter.Length > 0 then
             fun _ -> true  // TODO: should this be false if the letter does not repeat in the solution?
         else
-            fun (word: string) -> not (word.Contains(result.Letter))
+            DoesNotContain result
         
     let FilterForLetterAnswer (index: int) (result: LetterAnswer) =
         match result.State with
             | Miss -> FilterForMiss(result)
-            | Hit -> (fun (word: string) -> word.[index] = result.Letter)
+            | Hit -> ContainsLetterAtPosition index result
             | NearMiss -> (fun (word: string) -> not(word.[index] = result.Letter) && word.Contains(result.Letter))
         
     guessResult
