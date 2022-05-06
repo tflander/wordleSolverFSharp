@@ -1,3 +1,5 @@
+module Solver.Program
+
 open System
 
 open Solver.WordListTools

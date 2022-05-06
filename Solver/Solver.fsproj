@@ -11,6 +11,7 @@
         <Compile Include="WordListFilters.fs" />
         <Compile Include="WordGame.fs" />
         <Compile Include="WordListTools.fs" />
+        <Compile Include="WordGameRunner.fs" />
         <Compile Include="Program.fs" />
         <Content Include="words.txt">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>

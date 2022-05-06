@@ -2,17 +2,13 @@ module WordleSolverTests.E2eTests
 
 open System
 open Solver
+open Solver.WordGameRunner
 open Xunit
 open Swensen.Unquote
 open Solver.WordGame
 open Solver.WordListTools
 
 open WordleSolverTests.Support
-
-type GameData = {
-    wordList: string[]
-    guessCount: int
-}
 
 type ``End To End Tests`` () = 
 
