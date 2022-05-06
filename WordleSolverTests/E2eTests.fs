@@ -22,7 +22,7 @@ type ``End To End Tests`` () =
         let index = Random().Next(wordlist.Length)
         wordlist.[index]
 
-    let play(solution: string) =
+    let solveUsingAi(guessAi: string[] -> string) (solution: string) =
         let game = Guess solution
         
         let mutable gameData: GameData = {
@@ -30,7 +30,7 @@ type ``End To End Tests`` () =
             guessCount = 1
         }
         
-        let mutable guess: string = randomWord gameData.wordList        
+        let mutable guess: string = guessAi gameData.wordList        
         let mutable guessResult: Types.LetterAnswer list = game guess
     
         while(not (IsGameWon guessResult)) do
@@ -48,5 +48,6 @@ type ``End To End Tests`` () =
     member __.``Game Simulation``() =
 
         let game = GivenGameWithSolution("MUSIC")
+        let play = solveUsingAi randomWord
         play game
 
