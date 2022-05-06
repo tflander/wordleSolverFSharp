@@ -9,6 +9,11 @@ open Solver.WordListTools
 
 open WordleSolverTests.Support
 
+type GameData = {
+    wordList: string[]
+    guessCount: int
+}
+
 type ``End To End Tests`` () = 
 
     let fiveLetterWords = ReadFiveLetterWords("words.txt")
@@ -19,18 +24,24 @@ type ``End To End Tests`` () =
 
     let play(solution: string) =
         let game = Guess solution
-        let mutable wordList = fiveLetterWords
-        let mutable guessCount = 1
-        let mutable guess = randomWord wordList        
-        let mutable guessResult = game guess
+        
+        let mutable gameData: GameData = {
+            wordList = fiveLetterWords
+            guessCount = 1
+        }
+        
+        let mutable guess: string = randomWord gameData.wordList        
+        let mutable guessResult: Types.LetterAnswer list = game guess
     
         while(not (IsGameWon guessResult)) do
-            guessCount <- guessCount + 1
-            wordList <- FilterCandidateWords guessResult wordList
-            guess <- randomWord wordList
+            gameData <- {
+                wordList = FilterCandidateWords guessResult gameData.wordList
+                guessCount = gameData.guessCount + 1
+            }
+            guess <- randomWord gameData.wordList
             guessResult <- game guess
             
-        test <@ guessCount <= 6  @>
+        test <@ gameData.guessCount <= 6  @>
         
 //    [<Fact(Skip = "This is spike code to delete")>]
     [<Fact>]
