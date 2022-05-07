@@ -37,7 +37,7 @@ type ``End To End Tests`` () =
             guess <- randomWord gameData.wordList
             guessResult <- game guess
             
-        test <@ gameData.guessCount <= 6  @>
+        gameData.guessCount
         
 //    [<Fact(Skip = "This is spike code to delete")>]
     [<Fact>]
@@ -45,5 +45,6 @@ type ``End To End Tests`` () =
 
         let game = GivenGameWithSolution("MUSIC")
         let play = solveUsingAi randomWord
-        play game
+        let turnsToSolve = (play game)
+        test <@ turnsToSolve <= 6  @>
 
